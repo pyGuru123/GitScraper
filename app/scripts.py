@@ -59,8 +59,14 @@ def fetch_repo_stats(username):
         top_langs = fetch_top_langs(url_list)
         top_starred = sorted(star_list, key = lambda x : x[1], reverse=True)[:5]
         top_forked = sorted(fork_list, key = lambda x : x[1], reverse=True)[:5]
+
+        data = {
+            "top_languages" : top_langs,
+            "most_starred" : top_starred,
+            "most_forked" : top_forked
+        }
         
-        return [top_langs, top_starred, top_forked]
+        return data
     except Exception as e:
         print(e)
         return None

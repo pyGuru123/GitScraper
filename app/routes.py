@@ -17,7 +17,6 @@ def index():
             user = User(username.strip('@'))
             data = user.get_full_info()
             session['username'] = data['username']
-            session['data'] = data
             return render_template("index.html", index=True, data=data)
     return render_template("index.html", index=True, data=None)
 
@@ -26,20 +25,17 @@ def all_repo_stats(username):
     result = fetch_repo_stats(username)
     if result:
         json_data = json.dumps(result)
-        print(json_data)
         return json_data
     else:
         return json.dumps([])
 
-
 @app.route('/exportprofile', methods=["POST"])
 def export_profile():
     filename = f"{session.get('username')}.json"
-    content = str(session['data'])
     return Response(content,
-            mimetype='application/json',
-            headers={'Content-Disposition':f'attachment;filename={filename}'}
-        )
+        mimetype='application/json',
+        headers={'Content-Disposition':f'attachment;filename={filename}'}
+    )
 
 @app.route("/repo")
 @app.route("/repository")

@@ -29,7 +29,7 @@
     {% if data %}
         <div class="row">
             <!-- Left Pane -->
-            <div class="col-8 info-card">
+            <div class="col-8 col-xs-12 info-card">
                 <div class="row mb-3 pb-3">
                     <div class="col-4 text-end">
                         <img src="{{data['avatar']}}" class="avatar"/>
@@ -79,7 +79,7 @@
 
                 <div class="row text-center ms-2" style="margin-top: 20px;">
                     <form action="/exportprofile" method="post">
-                        <button type="submit" class="btn btn-primary" style="width:120px;">
+                        <button type="submit" class="btn btn-primary export" style="width:120px;">
                             Export Profile
                         </button>
                     </form>
@@ -87,7 +87,7 @@
             </div>
 
             <!-- Right Pane -->
-            <div class="col-4">
+            <div class="col-4 col-xs-12">
                 <div class="row text-center chartdiv" style="margin-left: 1px; margin-top: 10px;">
                     <div class="card-body">
                         <h5 class="right-title">Top Languages<h4>
@@ -129,9 +129,12 @@
             "#3F51B5",
             ];
 
+        var profile_data = JSON.parse('{{data|tojson}}');
+
         // const result = [{"Jupyter Notebook": 89.56, "Python": 8.88, "JavaScript": 0.7, "HTML": 0.51, "CSS": 0.21, "C": 0.14}, [["Python-Games", 111], ["HackFest21", 50], ["Python-on-WhatsApp", 43], ["Python-Projects", 30], ["GUI-Management-Systems", 6]], [["HackFest21", 151], ["Python-Games", 112], ["Python-Projects", 34], ["Python-on-WhatsApp", 14], ["Decrypto", 5]]];
 
         {% if data %}
+            const export_button = document.getElementsByClassName('export')[0];
             const chart = document.querySelector('canvas').getContext('2d');
             const starred_div = document.getElementsByClassName('most-starred')[0];
             const forked_div = document.getElementsByClassName('most-forked')[0];
@@ -141,12 +144,14 @@
                  titles[i].style.display = "none";
              }
 
+             export_button.disabled = true;
+
             fetch("/allrepostats/{{data['username']}}")
             .then(response => response.json())
             .then(result => {
-                const top_languages = result[0];
-                const most_starred = result[1];
-                const most_forked = result[2];
+                const top_languages = result["top_languages"];
+                const most_starred = result["most_starred"];
+                const most_forked = result["most_forked"];
 
                 var labels = Object.keys(top_languages)
                 var data = Object.values(top_languages);
@@ -196,11 +201,20 @@
                     p.appendChild(badge);
                     forked_div.appendChild(p);
                 }
+
+                export_button.disabled = false;
+                profile_data = { ...profile_data, ...result}
+            });
+
+            export_button.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log(profile_data);
             });
         {% endif %}
 
         if ( window.history.replaceState ) {
         window.history.replaceState( null, null, window.location.href );
         }
+        
     </script>
 {% endblock %}
