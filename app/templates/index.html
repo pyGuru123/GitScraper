@@ -142,9 +142,7 @@
             ];
 
         var profile_data = JSON.parse('{{data|tojson}}');
-
-        // const result = [{"Jupyter Notebook": 89.56, "Python": 8.88, "JavaScript": 0.7, "HTML": 0.51, "CSS": 0.21, "C": 0.14}, [["Python-Games", 111], ["HackFest21", 50], ["Python-on-WhatsApp", 43], ["Python-Projects", 30], ["GUI-Management-Systems", 6]], [["HackFest21", 151], ["Python-Games", 112], ["Python-Projects", 34], ["Python-on-WhatsApp", 14], ["Decrypto", 5]]];
-
+        
         {% if data %}
             const export_button = document.getElementsByClassName('export')[0];
             const chart = document.querySelector('canvas').getContext('2d');

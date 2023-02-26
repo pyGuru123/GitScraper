@@ -1,5 +1,5 @@
 from app import app
-from app.user import User
+from app.scraper import User, Repository
 from app.scripts import fetch_repo_stats
 
 import json
