@@ -91,3 +91,9 @@ footer {
 .forked-badge {
     background: linear-gradient(180deg, #23d77d 0%, #2df7c4 100%);
 }
+
+.alert {
+    margin-top: -50px;
+    padding: 10px;
+    font-weight: 520;
+}

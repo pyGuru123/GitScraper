@@ -118,6 +118,16 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger text-center">
+                    <p style="margin:0; padding:0;">{{message}}</p>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     {% endif %}
 
 {% endblock %}
@@ -218,7 +228,7 @@
                 input2.value = JSON.stringify(profile_data);
                 form.submit();
             });
-            
+
         {% endif %}
 
         if ( window.history.replaceState ) {
