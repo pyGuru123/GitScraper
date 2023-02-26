@@ -78,7 +78,9 @@
                 <hr>
 
                 <div class="row text-center ms-2" style="margin-top: 20px;">
-                    <form action="/exportprofile" method="post">
+                    <form action="/exportprofile" method="post" class="export-form">
+                        <input type="hidden" name="username" class="input1"/>
+                        <input type="hidden" name="data" class="input2"/>
                         <button type="submit" class="btn btn-primary export" style="width:120px;">
                             Export Profile
                         </button>
@@ -138,6 +140,10 @@
             const chart = document.querySelector('canvas').getContext('2d');
             const starred_div = document.getElementsByClassName('most-starred')[0];
             const forked_div = document.getElementsByClassName('most-forked')[0];
+
+            const form = document.getElementsByClassName('export-form')[0];
+            const input1 = document.getElementsByClassName('input1')[0];
+            const input2 = document.getElementsByClassName('input2')[0];
 
             const titles = document.querySelectorAll('.right-title');
             for (var i=0; i<titles.length; i++) {
@@ -208,8 +214,11 @@
 
             export_button.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log(profile_data);
+                input1.value = `{{data['username']}}`;
+                input2.value = JSON.stringify(profile_data);
+                form.submit();
             });
+            
         {% endif %}
 
         if ( window.history.replaceState ) {

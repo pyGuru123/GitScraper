@@ -31,8 +31,12 @@ def all_repo_stats(username):
 
 @app.route('/exportprofile', methods=["POST"])
 def export_profile():
-    filename = f"{session.get('username')}.json"
-    return Response(content,
+    username = request.form.get("username")
+    data = request.form.get("data")
+    print(data)
+    filename = f"{username}.json"
+    # content = json.loads(data)
+    return Response(data,
         mimetype='application/json',
         headers={'Content-Disposition':f'attachment;filename={filename}'}
     )
