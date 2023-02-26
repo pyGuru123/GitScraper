@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -158,3 +159,50 @@ class Repository:
         """Returns the number of issues in a repository"""
         issues = soup.select_one("[id*='issues-repo-tab-count']")
         return issues.text.strip()
+
+    @property
+    def pullrequests(self) -> str:
+        """Returns the number of pull requests in a repository"""
+        prs = soup.select_one("[id*='pull-requests-repo-tab-count']")
+        return prs.text.strip()
+
+    @property
+    def forks(self) -> str:
+        """Returns the number of forks of a repository"""
+        forks = soup.select_one("[id*='repo-network-counter']")
+        return forks.text.strip()
+
+    @property
+    def stars(self) -> str:
+        """Returns the number of stars on a repository"""
+        stars = soup.select_one("[id*='repo-stars-counter-star']")
+        return stars.text.strip()
+
+    @property
+    def watching(self) -> str:
+        """Returns the number of watchers on a repository"""
+        watching = soup.select_one("[id*='repo-network-counter']")
+        return watching.text.strip()
+
+    @property
+    def commits(self) -> str:
+        """Returns the number of commits on main branch of a repository"""
+        commits = soup.select_one("[class*='ml-0 ml-md-3']")
+        return ''.join(re.findall('\d+', commits.text))
+
+    @property
+    def repotype(self) -> str:
+        """Returns repository type - public / private"""
+        repotype = soup.select_one("[class*='Label Label--secondary v-align-middle mr-1']")
+        return repotype.text.strip()
+
+    @property
+    def languages(self) -> dict:
+        """Returns the languages used in the repository"""
+        languages = {}
+        langs = soup.select("[class*='d-inline-flex flex-items-center flex-nowrap Link--secondary no-underline text-small mr-3']")
+        for lang in langs:
+            datalist = lang.text.strip().split('\n')
+            languages[datalist[0]] = datalist[1].strip('%')
+
+        return languages

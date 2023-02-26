@@ -4,6 +4,8 @@ import concurrent.futures
 
 GITHUB_TOKEN = app.config.get('GITHUB_TOKEN')
 
+### For User Class
+
 def fetch_repo_langs(url):
     """Fetches programming languages used in a user's single repo """
     headers = {'Authorization' : f'token {GITHUB_TOKEN}'}
@@ -70,3 +72,10 @@ def fetch_repo_stats(username):
     except Exception as e:
         print(e)
         return None
+
+### For Repository Class
+
+def fetch_repo_lines(username, repo):
+    url = f"https://api.codetabs.com/v1/loc?github={username}/{repo}"
+    r = requests.get(url)
+    return list(filter(lambda dct : dct['language'] == 'Total', r.json()))[0]
