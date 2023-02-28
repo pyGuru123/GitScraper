@@ -17,7 +17,6 @@ def index():
             try:
                 user = User(username.strip('@'))
                 data = user.get_full_info()
-                session['username'] = data['username']
                 return render_template("index.html", index=True, data=data)
             except:
                 flash("Username doesn't exist")
@@ -37,7 +36,6 @@ def all_repo_stats(username):
 def export_profile():
     username = request.form.get("username")
     data = request.form.get("data")
-    print(data)
     filename = f"{username}.json"
     # content = json.loads(data)
     return Response(data,
@@ -46,8 +44,19 @@ def export_profile():
     )
 
 @app.route("/repo")
-@app.route("/repository")
-def register():
+@app.route("/repository", methods=["GET", "POST"])
+def repository():
+    if request.method == "POST":
+        repo_url = request.form.get("repo")
+        if repo_url:
+            try:
+                repo = Repository(repo_url)
+                data = repo.get_full_info()
+                return render_template("repository.html", index=True, data=data)
+            except:
+                flash("Repository doesn't exist")
+                return redirect("/repo")
+
     return render_template("repository.html", repo=True)
 
 @app.route("/langs")
