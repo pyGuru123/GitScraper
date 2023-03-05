@@ -140,7 +140,7 @@ class Repository:
             about = self.soup.select_one("[class*='f4 my-3']")
             return about.text.strip()
         except:
-            return 
+            return None
 
     @property
     def weblink(self) -> str:
@@ -154,8 +154,11 @@ class Repository:
     @property
     def topics(self) -> list[str]:
         """Returns the topics listed under a repository"""
-        topics = self.soup.select("[class*='topic-tag topic-tag-link']")
-        return [topic.text.strip() for topic in topics]
+        try:
+            topics = self.soup.select("[class*='topic-tag topic-tag-link']")
+            return [topic.text.strip() for topic in topics]
+        except:
+            return []
 
     @property
     def issues(self) -> str:
@@ -202,15 +205,17 @@ class Repository:
     @property
     def languages(self) -> dict:
         """Returns the languages used in the repository"""
-        languages = {}
-        langs = self.soup.select("[class*='d-inline-flex flex-items-center flex-nowrap Link--secondary no-underline text-small mr-3']")
-        for lang in langs:
-            datalist = lang.text.strip().split('\n')
-            languages[datalist[0]] = datalist[1].strip('%')
+        try: 
+            languages = {}
+            langs = self.soup.select("[class*='d-inline-flex flex-items-center flex-nowrap Link--secondary no-underline text-small mr-3']")
+            for lang in langs:
+                datalist = lang.text.strip().split('\n')
+                languages[datalist[0]] = datalist[1].strip('%')
 
-        return languages
+            return languages
+        except:
+            return {}
 
-    @property
     def get_full_info(self) -> dict:
         """Returns the complete scraped user info"""
         data = {
@@ -228,3 +233,5 @@ class Repository:
             "repotype" : self.repotype,
             "languages" : self.languages
         }
+
+        return data
